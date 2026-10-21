@@ -1,0 +1,21 @@
+{
+  "python": "3.14.2",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "matplotlib": "3.11.2",
+  "pyserial": "3.5",
+  "simulacao_offline": "aprovada: comparacao com solucao analitica",
+  "serial_loopback_virtual": "aprovado",
+  "portas_disponiveis": [
+    {
+      "porta": "COM3",
+      "descricao": "Serial Padrão por link Bluetooth (COM3)"
+    },
+    {
+      "porta": "COM4",
+      "descricao": "Serial Padrão por link Bluetooth (COM4)"
+    }
+  ],
+  "hardware_testado": false,
+  "tempo_real_validado": false
+}

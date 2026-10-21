@@ -1,0 +1,37 @@
+[
+  {
+    "arquivo": "cDAQ_9174_Especificacoes_374045a.pdf",
+    "url": "https://download.ni.com/support/manuals/374045a.pdf",
+    "acesso": "2026-10-20",
+    "paginas": 10,
+    "sha256": "f339c93acc2713094ff7db908f36d2f19733f7d0715b956872390eda5bfa292d"
+  },
+  {
+    "arquivo": "cDAQ_9171_9174_9178_Guia_372838e.pdf",
+    "url": "https://docs-be.ni.com/bundle/cdaq-9171-9174-9178-features/raw/resource/enus/372838e.pdf",
+    "acesso": "2026-10-20",
+    "paginas": 105,
+    "sha256": "10a4d23bedfac75b6bf4d172f8551cfaf19f91520651f8cfee3fe5f96d0c9d78"
+  },
+  {
+    "arquivo": "NI_9205_Datasheet_374188b_02.pdf",
+    "url": "https://download.ni.com/support/manuals/374188b_02.pdf",
+    "acesso": "2026-10-20",
+    "paginas": 14,
+    "sha256": "d018ee419a9746d068ebc16aabb1e72f44c142517cb1ff69f529e6eaac276bda"
+  },
+  {
+    "arquivo": "NI_9263_Datasheet_373781b_02.pdf",
+    "url": "https://download.ni.com/support/manuals/373781b_02.pdf",
+    "acesso": "2026-10-20",
+    "paginas": 12,
+    "sha256": "d6f61fdeb74a196d3a893b14f0471c565d475c79ddf335a86bae6c221705364c"
+  },
+  {
+    "arquivo": "NI_9401_Datasheet_374068a_02.pdf",
+    "url": "https://download.ni.com/support/manuals/374068a_02.pdf",
+    "acesso": "2026-10-20",
+    "paginas": 10,
+    "sha256": "ee89b59c3349a3e159a6a698ef27a5d10e08fd861b4393f7aab12133f27cc59f"
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}\\..\\ambiente_python\\Scripts\\python.exe",
+  "files.associations": {
+    "*.ino": "cpp"
+  }
+}
