@@ -58,7 +58,7 @@ Essa arquitetura ainda será detalhada durante a definição dos requisitos e a 
 |---|---|
 | Revisão bibliográfica sobre DAQ, plataformas abertas e HIL | ✅ Concluída e revisada |
 | Estudo de equipamentos comerciais da National Instruments | ✅ Concluído para fundamentação e comparação |
-| Levantamento preliminar de requisitos funcionais | 🟡 Em desenvolvimento |
+| Especificação de requisitos v0.2 | 🟡 Em validação |
 | Preparação do ambiente de simulação HIL no computador | ✅ Concluída |
 | Teste HIL inicial com ESP32 DevKit V1 | ✅ Ensaio físico concluído com período de 10 ms |
 | Definição da arquitetura final e seleção do ARM | ⏳ Próxima etapa |
@@ -83,7 +83,8 @@ TCC_DAQ/
 ## 📚 Documentos em destaque
 
 - [Revisão bibliográfica revisada](<Revisao Bibliografica/Revisao_2026-10-20/Revisao_Bibliografica_NI.pdf>)
-- [Requisitos funcionais preliminares](<Material de Estudo/Requisitos_Funcionais_Plataforma_DAQ_HIL.pdf>)
+- [Especificação de requisitos v0.2](<Requisitos/Especificacao_de_Requisitos_DAQ_HIL_v0.2.md>)
+- [Documento preliminar de requisitos](<Material de Estudo/Requisitos_Funcionais_Plataforma_DAQ_HIL.pdf>)
 - [Estudo do NI CompactDAQ](<Documentos da NI/CompactDAQ/Estudo_CompactDAQ_PT_BR.md>)
 - [Resumo técnico do NI USB-6001](<Documentos da NI/NI_USB_6001_Resumo_TCC.md>)
 - [Notas de leitura sobre tecnologias da NI](<Documentos da NI/Notas_de_leitura_NI_2026-10-19.md>)
@@ -114,7 +115,7 @@ O projeto do firmware usa **VS Code + PlatformIO** e a configuração `esp32doit
 
 ## 🗺️ Próximas etapas
 
-1. Consolidar requisitos de entradas e saídas, faixas de tensão, resolução, taxa de amostragem, temporização e comunicação.
+1. Validar os valores propostos na especificação v0.2 e congelar a versão 1.0 dos requisitos.
 2. Definir a arquitetura modular e selecionar o microcontrolador ARM de 32 bits.
 3. Projetar o condicionamento de sinais, as proteções elétricas e a alimentação.
 4. Desenvolver o esquemático e a placa de circuito impresso.
@@ -132,4 +133,5 @@ Os equipamentos da **National Instruments**, especialmente o NI USB-6001 e a fam
 Projeto desenvolvido por **Pedro A. Monteiro** como Trabalho de Conclusão de Curso na **Universidade Estadual de Londrina (UEL)**.
 
 O repositório acompanha a evolução da pesquisa, do hardware e do software. A licença aberta aplicável aos arquivos será definida antes da publicação da versão final da plataforma.
+
 
