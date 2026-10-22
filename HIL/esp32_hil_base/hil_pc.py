@@ -27,43 +27,60 @@ def main() -> None:
     parser.add_argument('--modo', choices=('simulado', 'serial'), default='simulado')
     parser.add_argument('--porta', help='Exemplo: COM5')
     parser.add_argument('--passos', type=int, default=2000)
-    parser.add_argument('--periodo-ms', type=float, default=1.0)
+    parser.add_argument('--periodo-ms', type=float, default=10.0)
     args = parser.parse_args()
     if args.modo == 'serial' and not args.porta:
         parser.error('--porta e obrigatoria no modo serial')
+    if args.passos <= 0:
+        parser.error('--passos deve ser maior que zero')
+    if not 0.1 <= args.periodo_ms <= 100.0:
+        parser.error('--periodo-ms deve estar entre 0,1 e 100 ms')
 
     dt = args.periodo_ms / 1000.0
     y = 0.0
     integral = 0.0
-    rows: list[tuple[int, float, float, float, float]] = []
+    rows: list[tuple[int, float, float, float, float, float, int, float]] = []
     port = serial.Serial(args.porta, 921600, timeout=0.2) if args.modo == 'serial' else None
     if port:
         time.sleep(2.0)
         port.reset_input_buffer()
+        port.write(b'RESET\n')
+        reset_response = port.readline().decode('ascii', errors='replace').strip()
+        if reset_response != 'RESET,OK':
+            port.close()
+            raise RuntimeError(f'Falha ao reiniciar o controlador: {reset_response!r}')
 
-    deadline = time.perf_counter()
+    test_start = time.perf_counter()
+    deadline = test_start
     try:
         for sequence in range(args.passos):
             start = time.perf_counter()
+            esp_time_us = float('nan')
             if port:
-                port.write(f'MEAS,{sequence},{y:.7f}\n'.encode('ascii'))
+                port.write(f'MEAS,{sequence},{y:.7f},{dt:.7f}\n'.encode('ascii'))
                 response = port.readline().decode('ascii', errors='replace').strip()
                 fields = response.split(',')
                 if len(fields) != 4 or fields[0] != 'CTRL' or int(fields[1]) != sequence:
                     raise RuntimeError(f'Resposta inesperada: {response!r}')
                 u = float(fields[2])
+                esp_time_us = float(fields[3])
             else:
                 u, integral = controller_simulated(y, integral, dt)
 
             # Planta ilustrativa: dy/dt=(-y+u)/0,1, integrada por Euler.
             y += dt * (-y + u) / 0.1
             elapsed = time.perf_counter() - start
-            rows.append((sequence, sequence * dt, y, u, elapsed))
+            deadline_missed = 0
             if port:
                 deadline += dt
                 remaining = deadline - time.perf_counter()
                 if remaining > 0:
                     time.sleep(remaining)
+                else:
+                    deadline_missed = 1
+            real_time = time.perf_counter() - test_start
+            rows.append((sequence, sequence * dt, real_time, y, u, elapsed,
+                         deadline_missed, esp_time_us))
     finally:
         if port:
             port.close()
@@ -72,17 +89,18 @@ def main() -> None:
     result.mkdir(exist_ok=True)
     with (result / 'ensaio.csv').open('w', newline='', encoding='utf-8') as stream:
         writer = csv.writer(stream)
-        writer.writerow(('sequencia', 'tempo_s', 'y', 'u', 'latencia_s'))
+        writer.writerow(('sequencia', 'tempo_nominal_s', 'tempo_real_s', 'y', 'u',
+                         'latencia_s', 'prazo_violado', 'tempo_esp_us'))
         writer.writerows(rows)
 
     data = np.asarray(rows)
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8, 6))
-    ax1.plot(data[:, 1], data[:, 2], label='Saida da planta')
+    ax1.plot(data[:, 1], data[:, 3], label='Saida da planta')
     ax1.axhline(1.0, color='k', linestyle='--', label='Referencia')
     ax1.set_ylabel('Amplitude')
     ax1.legend()
     ax1.grid(alpha=0.3)
-    ax2.plot(data[:, 1], data[:, 4] * 1e3)
+    ax2.plot(data[:, 1], data[:, 5] * 1e3)
     ax2.axhline(args.periodo_ms, color='r', linestyle='--', label='Periodo solicitado')
     ax2.set(xlabel='Tempo (s)', ylabel='Latencia por ciclo (ms)')
     ax2.legend()
@@ -90,7 +108,9 @@ def main() -> None:
     fig.tight_layout()
     fig.savefig(result / 'ensaio.png', dpi=160)
     print(f'Modo: {args.modo}; passos: {args.passos}; y final: {y:.6f}')
-    print(f'Latencia maxima observada: {data[:, 4].max() * 1e3:.3f} ms')
+    print(f'Latencia media observada: {data[:, 5].mean() * 1e3:.3f} ms')
+    print(f'Latencia maxima observada: {data[:, 5].max() * 1e3:.3f} ms')
+    print(f'Prazos violados: {int(data[:, 6].sum())} de {args.passos}')
     print('Este ensaio mede a configuracao testada; nao prova um limite de pior caso.')
 
 

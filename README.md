@@ -60,13 +60,13 @@ Essa arquitetura ainda será detalhada durante a definição dos requisitos e a 
 | Estudo de equipamentos comerciais da National Instruments | ✅ Concluído para fundamentação e comparação |
 | Levantamento preliminar de requisitos funcionais | 🟡 Em desenvolvimento |
 | Preparação do ambiente de simulação HIL no computador | ✅ Concluída |
-| Teste HIL inicial com ESP32 DevKit V1 | 🧪 Software validado em simulação; teste físico pendente |
+| Teste HIL inicial com ESP32 DevKit V1 | ✅ Ensaio físico concluído com período de 10 ms |
 | Definição da arquitetura final e seleção do ARM | ⏳ Próxima etapa |
 | Esquemático, placa de circuito impresso e protótipo | ⏳ Pendente |
 | Firmware e software supervisório finais | ⏳ Pendente |
 | Ensaios de validação DAQ e demonstração HIL | ⏳ Pendente |
 
-> **Observação sobre o ESP32:** ele está sendo usado apenas como plataforma temporária para aprender e validar a comunicação e o fluxo de um ensaio HIL. O firmware-base foi compilado, mas ainda não foi gravado na placa. A plataforma final prevista no TCC utilizará um microcontrolador ARM de 32 bits.
+> **Observação sobre o ESP32:** ele está sendo usado como plataforma temporária para aprender e validar a comunicação e o fluxo de um ensaio HIL. O firmware-base foi gravado e testado fisicamente em 21/10/2026. A plataforma final prevista no TCC utilizará um microcontrolador ARM de 32 bits.
 
 ## 📁 Organização do repositório
 
@@ -89,10 +89,11 @@ TCC_DAQ/
 - [Notas de leitura sobre tecnologias da NI](<Documentos da NI/Notas_de_leitura_NI_2026-10-19.md>)
 - [Documentação do ambiente HIL](<HIL/LEIA-ME.md>)
 - [Experimento HIL inicial com ESP32](<HIL/esp32_hil_base/README.md>)
+- [Relatório do primeiro ensaio HIL físico](<HIL/esp32_hil_base/resultados/Relatorio_ensaio_HIL_ESP32_2026-10-21.md>)
 
 ## 🧪 Primeiro experimento HIL
 
-O ambiente inicial executa no computador o modelo de uma planta de primeira ordem e reserva ao ESP32 a execução de um controlador PI. A troca de dados será feita por USB serial, permitindo medir resposta, latência, jitter e eventuais perdas de comunicação.
+O ambiente inicial executa no computador o modelo de uma planta de primeira ordem e reserva ao ESP32 a execução de um controlador PI. A troca de dados é feita por USB serial, permitindo medir resposta, latência, jitter e eventuais perdas de comunicação.
 
 O teste do lado do computador pode ser executado sem conectar a placa:
 
@@ -107,7 +108,9 @@ Para conferir as dependências instaladas:
 HIL\ambiente_python\Scripts\python.exe HIL\verificar_ambiente.py
 ```
 
-O projeto do firmware usa **VS Code + PlatformIO** e a configuração `esp32doit-devkit-v1`. A gravação na placa será feita somente quando o ensaio físico for iniciado, pois esse procedimento substitui o firmware presente no ESP32.
+O projeto do firmware usa **VS Code + PlatformIO** e a configuração `esp32doit-devkit-v1`. No primeiro ensaio físico, 1000 ciclos foram executados com período de 10 ms, sem violações de prazo ou falhas de sequência. A latência média foi de 3,55 ms e a máxima de 4,88 ms.
+
+![Resposta da planta e latência do ensaio HIL](HIL/esp32_hil_base/resultados/ensaio_serial_10ms.png)
 
 ## 🗺️ Próximas etapas
 
